@@ -1,9 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const Musica = require('../models/musica');
+const listaDeMusicas = require('../models/musica');
 
 router.get('/', (request, response) => {
-    response.status(200).send(Musica);
+    
+    const { body } = request;
+
+    if (body.nome === undefined) {
+        response.status(400).json({ mensagem: 'O campo "nome" é necessário'});
+    } else if (body.nome === '') {
+        response.status(400).json({ message: 'O campo "nome" não pode estar vazio'});
+    } else {
+        response.status(200).send(Musica);
+    }
+});
+
+router.post('/', (request, response) => {
+
+    const { nome, artista, genero, quantidadeDownloads } = request.body;
+
+    const newMusic = {
+        nome: nome,
+        artista: artista,
+        genero: genero,
+        quantidadeDownloads: quantidadeDownloads,
+    };
+
+    listaDeMusicas.push( newMusic );
+
+    response.json( newMusic );
+
 });
 
 module.exports = router;
