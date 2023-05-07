@@ -33,4 +33,26 @@ router.post('/', (request, response) => {
 
 });
 
+router.put('/:nome', (request, response) => {
+
+    const { nome } = request.params;
+
+    const music = listaDeMusicas.find( msc => msc.nome == nome);
+
+    if( !music ) {
+        return response.status(204).json();
+    }
+
+    const { artista, genero, quantidadeDownloads } = request.body;
+
+    music.artista = artista;
+    music.genero = genero;
+    music.quantidadeDownloads = quantidadeDownloads;
+
+    response.json(music);
+
+});
+
+
+
 module.exports = router;
