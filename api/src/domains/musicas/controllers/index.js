@@ -53,6 +53,14 @@ router.put('/:nome', (request, response) => {
 
 });
 
+router.delete('/:nome', (request, response) => {
 
+    const { nome } = request.params;
+
+    const musicFiltered = listaDeMusicas.filter( music => music.nome != nome);
+
+    response.json(musicFiltered);
+    
+});
 
 module.exports = router;
