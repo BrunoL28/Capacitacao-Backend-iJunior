@@ -1,66 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const Musica = require('../models/musica');
 const listaDeMusicas = require('../models/musica');
 
 router.get('/', (request, response) => {
-    
-    const { body } = request;
-
-    if (body.nome === undefined) {
-        response.status(400).json({ mensagem: 'O campo "nome" é necessário'});
-    } else if (body.nome === '') {
-        response.status(400).json({ message: 'O campo "nome" não pode estar vazio'});
-    } else {
-        response.status(200).send(Musica);
-    }
+    response.status(200).json(listaDeMusicas);
 });
 
 router.post('/', (request, response) => {
-
     const { nome, artista, genero, quantidadeDownloads } = request.body;
 
-    const newMusic = {
-        nome: nome,
-        artista: artista,
-        genero: genero,
-        quantidadeDownloads: quantidadeDownloads,
-    };
+    if (!nome) {
+        response.status(400).json({ mensagem: 'O campo "nome" é necessário' });
+        return;
+    }
 
-    listaDeMusicas.push( newMusic );
+    const newMusic = { nome, artista, genero, quantidadeDownloads };
+    listaDeMusicas.push(newMusic);
 
-    response.json( newMusic );
-
+    response.status(201).json(newMusic);
 });
 
 router.put('/:nome', (request, response) => {
-
     const { nome } = request.params;
 
-    const music = listaDeMusicas.find( msc => msc.nome == nome);
+    const music = listaDeMusicas.find(msc => msc.nome === nome);
 
-    if( !music ) {
-        return response.status(204).json();
+    if (!music) {
+        response.status(404).json({ mensagem: 'Música não encontrada' });
+        return;
     }
 
     const { artista, genero, quantidadeDownloads } = request.body;
 
-    music.artista = artista;
-    music.genero = genero;
-    music.quantidadeDownloads = quantidadeDownloads;
+    music.artista = artista || music.artista;
+    music.genero = genero || music.genero;
+    music.quantidadeDownloads = quantidadeDownloads || music.quantidadeDownloads;
 
     response.json(music);
-
 });
 
 router.delete('/:nome', (request, response) => {
-
     const { nome } = request.params;
 
-    const musicFiltered = listaDeMusicas.filter( music => music.nome != nome);
+    const musicIndex = listaDeMusicas.findIndex(msc => msc.nome === nome);
 
-    response.json(musicFiltered);
-    
+    if (musicIndex === -1) {
+        response.status(404).json({ mensagem: 'Música não encontrada' });
+        return;
+    }
+
+    listaDeMusicas.splice(musicIndex, 1);
+
+    response.status(204).send();
 });
 
 module.exports = router;
