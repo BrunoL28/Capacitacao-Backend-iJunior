@@ -19,6 +19,10 @@ const usuario = sequelize.define('Usuario', {
     senha:{
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    cargo: {
+        type: DataTypes.ENUM('admin', 'user'),
+        allowNull: false,
     }
 });
 
