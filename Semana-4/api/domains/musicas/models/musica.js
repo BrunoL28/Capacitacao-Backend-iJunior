@@ -1,5 +1,6 @@
 const sequelize = require('../../../database/index');
-const { DataTypes } = require('sequelize');
+const { DataTypes, BelongsTo } = require('sequelize');
+const Artista = require('../../artistas/models/artista');
 
 const musica = sequelize.define('Musica', {
     id: {
@@ -26,6 +27,8 @@ const musica = sequelize.define('Musica', {
         allowNull: false,
     }
 });
+
+musica.belongsTo(Artista, {as: 'artista', foreignKey: 'artistaId'});
 
 musica.sync({alter: false, force: false})
     .then(() => {
