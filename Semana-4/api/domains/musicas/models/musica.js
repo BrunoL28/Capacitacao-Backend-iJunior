@@ -1,5 +1,5 @@
 const sequelize = require('../../../database/index');
-const { DataTypes, BelongsTo } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const Artista = require('../../artistas/models/artista');
 
 const musica = sequelize.define('Musica', {
