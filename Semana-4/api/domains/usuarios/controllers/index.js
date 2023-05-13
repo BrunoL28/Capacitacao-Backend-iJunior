@@ -35,14 +35,14 @@ router.put('/:id', async(req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async(req, res) => {
     const { id } = req.params;
     try {
         const Usuario = await usuario.findByPk(id);
         if (!Usuario) {
             return res.status(401).json({ error: 'User not found!'});
         }
-        await usuario.destroy();
+        await Usuario.destroy();
         return res.status(204).send();
     } catch (exception) {
         return res.status(401).json({ error: exception.mensage });
