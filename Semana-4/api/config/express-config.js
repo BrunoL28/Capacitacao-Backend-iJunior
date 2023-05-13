@@ -9,8 +9,10 @@ app.use(express.urlencoded({
 
 app.use(express.json());
 
-const usuarioRouter = require('../domains/usuarios/controllers/index');
+const usuarioRouter1 = require('../domains/usuarios/controllers/index');
+const usuarioRouter2 = require('../domains/musicas/controllers/index');
 
-app.use('/api/usuarios', usuarioRouter);
+app.use('/api/usuarios', usuarioRouter1);
+app.use('/api/musicas', usuarioRouter2);
 
 module.exports = app;
