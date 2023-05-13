@@ -26,12 +26,12 @@ router.put('/:id', async(req, res) => {
     try {
         const Usuario = await usuario.findByPk(id);
         if (!Usuario) {
-            return res.status(401).json({ error: 'User not found!'});
+            return res.status(404).json({ error: 'User not found!'});
         }
         const usuarioAtualizado = await usuario.update(req.body);
         return res.status(200).json(usuarioAtualizado);
     } catch (exception) {
-        return res.status(401).json({ error: exception.mensage });
+        return res.status(400).json({ error: exception.mensage });
     }
 });
 
@@ -40,12 +40,12 @@ router.delete('/:id', async(req, res) => {
     try {
         const Usuario = await usuario.findByPk(id);
         if (!Usuario) {
-            return res.status(401).json({ error: 'User not found!'});
+            return res.status(404).json({ error: 'User not found!'});
         }
         await Usuario.destroy();
-        return res.status(204).send();
+        return res.status(200).send();
     } catch (exception) {
-        return res.status(401).json({ error: exception.mensage });
+        return res.status(400).json({ error: exception.mensage });
     }
 });
 
