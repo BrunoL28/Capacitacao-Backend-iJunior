@@ -1,4 +1,4 @@
-const router = require('express').Router;
+const router = require('express').Router();
 const musica = require('../models/musica');
 
 router.get('/', async(req, res) => {
