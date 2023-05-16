@@ -1,6 +1,5 @@
 const sequelize = require('../../../database/Index');
 const { DataTypes } = require('sequelize');
-const Musica = require('../../musicas/models/Musica');
 
 const Artista = sequelize.define('Artista', {
     id: {
@@ -22,8 +21,6 @@ const Artista = sequelize.define('Artista', {
         allowNull: false,
     },
 });
-
-Artista.hasMany(Musica, { as: 'musicas'});
 
 Artista.sync({alter: false, force: false})
     .then(() => {
