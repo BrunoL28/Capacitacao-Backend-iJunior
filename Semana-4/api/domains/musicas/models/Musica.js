@@ -29,9 +29,10 @@ const Musica = sequelize.define('Musica', {
     },
 });
 
-Artista.hasMany(Musica, { as: 'musicas', foreignKey: 'artistaId'});
-Musica.belongsToMany(Usuario, { through: 'UsuarioMusicas', as: 'usuarios'});
-Usuario.hasMany(Musica, {as: 'musicas'});
+Musica.belongsTo(Artista, { foreignKey: 'artistaId' }); // Uma música pertence a um artista
+Artista.hasMany(Musica, { foreignKey: 'artistaId' }); // Um artista tem várias músicas
+Musica.belongsToMany(Usuario, { through: 'UsuarioMusica' }); // Uma música pode ter vários usuários
+Usuario.belongsToMany(Musica, { through: 'UsuarioMusica' }); // Um usuário pode ter várias músicas
 
 Musica.sync({alter: false, force: false})
     .then(() => {
