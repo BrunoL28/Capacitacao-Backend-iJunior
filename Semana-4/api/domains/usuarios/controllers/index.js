@@ -16,7 +16,8 @@ router.post('/', async(request, response) => {
     const body = request.body;
     try {
         await UsuarioService.criacao(body);
-        return response.status(201).json({ message: 'usuario criado com sucesso' });
+        console.log('voltou do Service');
+        return response.status(201).json({ message: 'usuario criado com sucesso' }).end();
     } catch {
         return response.status(400);
     }
