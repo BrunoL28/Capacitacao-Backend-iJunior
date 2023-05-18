@@ -3,10 +3,12 @@ const Usuario = require('../models/Usuario');
 class UsuarioService {
     
     async retorno() {
-        await Usuario.findAll();
+        return await Usuario.findAll();
     }
     
     async criacao(body) {
+        console.log('Entrou no Service');
+        console.log(body);
         await Usuario.create(body);
     }
 

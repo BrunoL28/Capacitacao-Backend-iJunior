@@ -1,12 +1,15 @@
 const Musica = require('../models/Musica');
 
 class MusicaService {
+
     async retorno() {
-        await Musica.findAll();
+        return await Musica.findAll();
     }
 
     async criacao(body) {
-        await Musica.create(body);
+        console.log('Entrou no Service');
+        console.log(body);
+        return await Musica.create(body);
     }
 
     async encontrar(id) {
@@ -17,7 +20,7 @@ class MusicaService {
             }
             return musica;
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 
@@ -27,7 +30,7 @@ class MusicaService {
             const musicaAtualizada = await musica.update(att_musica);
             return musicaAtualizada;
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 
@@ -36,7 +39,7 @@ class MusicaService {
             const musica = await this.encontrar(id);
             await musica.destroy();
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 }
