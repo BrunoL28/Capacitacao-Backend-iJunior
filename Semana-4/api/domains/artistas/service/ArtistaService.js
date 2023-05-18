@@ -3,7 +3,7 @@ const Artista = require('../models/Artista');
 class ArtistaService {
     
     async retorno() {
-        await Artista.findAll();
+        return await Artista.findAll();
     }
     
     async criacao(body) {
@@ -18,7 +18,7 @@ class ArtistaService {
             }
             return artista;
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 
@@ -28,7 +28,7 @@ class ArtistaService {
             const artistaAtualizado = await artista.update(att_artista);
             return artistaAtualizado;
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 
@@ -37,7 +37,7 @@ class ArtistaService {
             const artista = await this.encontrar(id);
             await artista.destroy();
         } catch (erro) {
-            throw new Error(erro.mensage);
+            throw new Error(erro.message);
         }
     }
 }
