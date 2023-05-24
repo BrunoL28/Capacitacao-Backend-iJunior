@@ -7,12 +7,18 @@ class MusicaService {
     }
 
     async criacao(body) {
-        console.log('Entrou no Service');
-        console.log(body);
-        return await Musica.create(body);
+        try {
+            const musica = await Musica.findOne( { where: {titulo: body.nome} } );
+            if (musica) {
+                throw new Error('Essa musica já existe');
+            }
+            await Musica.create(body);
+        } catch (erro) {
+            throw new Error(erro.message);
+        }
     }
 
-    async encontrar(id) {
+    async encontrar_por_id(id) {
         try {
             const musica = await Musica.findByPk(id);
             if (!musica) {
@@ -24,9 +30,21 @@ class MusicaService {
         }
     }
 
+    async encontrar_por_titulo(titulo) {
+        try {
+            const musica = await Musica.findOne( { where: {titulo: titulo} } );
+            if (!musica) {
+                throw new Error('Musica não foi encontrada');
+            }
+            return musica;
+        } catch (erro) {
+            throw new Error(erro.message);
+        }
+    }
+
     async atualizar(id, att_musica) {
         try {
-            const musica = await this.encontrar(id);
+            const musica = await this.encontrar_por_id(id);
             const musicaAtualizada = await musica.update(att_musica);
             return musicaAtualizada;
         } catch (erro) {
@@ -34,9 +52,18 @@ class MusicaService {
         }
     }
 
-    async deletar(id) {
+    async deletar_por_id(id) {
         try {
-            const musica = await this.encontrar(id);
+            const musica = await this.encontrar_por_id(id);
+            await musica.destroy();
+        } catch (erro) {
+            throw new Error(erro.message);
+        }
+    }
+
+    async deletar_por_titulo(titulo) {
+        try {
+            const musica = await this.encontrar_por_titulo(titulo);
             await musica.destroy();
         } catch (erro) {
             throw new Error(erro.message);

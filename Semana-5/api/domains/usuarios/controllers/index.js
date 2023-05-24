@@ -17,8 +17,8 @@ router.post('/', async(request, response) => {
         await UsuarioService.criacao(body);
         console.log('voltou do Service');
         return response.status(statusHTTP.created).json({ message: 'usuario criado com sucesso' }).end();
-    } catch {
-        return response.status(statusHTTP.bad_request).json({ error: exception.message });;
+    } catch (exception) {
+        return response.status(statusHTTP.bad_request).json({ error: exception.message });
     }
 });
 
