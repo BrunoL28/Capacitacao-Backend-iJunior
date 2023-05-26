@@ -1,44 +1,44 @@
 const router = require('express').Router();
 const UsuarioService = require('../service/UsuarioService');
-const statusHTTP = require('../../../constants/statusHTTP');
+const statusHTTP = require('../../../../constants/statusHTTP');
 
-router.get('/', async(request, response) => {
+router.get('/', async(request, response, next) => {
     try {
         const usuarios = await UsuarioService.retorno();
         return response.status(statusHTTP.success).json(usuarios);
-    } catch (exception) {
-        return response.status(statusHTTP.bad_request).json({ error: exception.message });
+    } catch (error) {
+        next(error);
     }
 });
 
-router.post('/', async(request, response) => {
+router.post('/', async(request, response, next) => {
     const body = request.body;
     try {
         await UsuarioService.criacao(body);
         console.log('voltou do Service');
         return response.status(statusHTTP.created).json({ message: 'usuario criado com sucesso' }).end();
-    } catch (exception) {
-        return response.status(statusHTTP.bad_request).json({ error: exception.message });
+    } catch (error) {
+        next(error);
     }
 });
 
-router.put('/:id', async(request, response) => {
+router.put('/:id', async(request, response, next) => {
     const { id } = request.params;
     try {
         const usuario_atualizado = await UsuarioService.atualizar(id, request.body);
         return response.status(statusHTTP.success).json(usuario_atualizado);
-    } catch (exception) {
-        return response.status(statusHTTP.bad_request).json({ erro: exception.mensage });
+    } catch (error) {
+        next(error);
     }
 });
 
-router.delete('/:id', async(request, response) => {
+router.delete('/:id', async(request, response, next) => {
     const { id } = request.params;
     try {
         await UsuarioService.deletar(id);
         return response.status(statusHTTP.no_content).send();
-    } catch (exception) {
-        return response.status(statusHTTP.bad_request).json({ erro: exception.mensage });
+    } catch (error) {
+        next(error);
     }
 }); 
 

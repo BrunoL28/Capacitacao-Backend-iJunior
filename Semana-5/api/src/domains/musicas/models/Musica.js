@@ -1,4 +1,4 @@
-const sequelize = require('../../../database/Index');
+const sequelize = require('../../../../database/Index');
 const { DataTypes } = require('sequelize');
 const Artista = require('../../artistas/models/Artista');
 
