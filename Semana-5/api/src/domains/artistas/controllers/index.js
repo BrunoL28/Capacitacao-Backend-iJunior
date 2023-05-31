@@ -11,26 +11,6 @@ router.get('/', async(request, response, next) => {
     }
 });
 
-router.get('/:nome', async(request, response, next) => {
-    const { nome } = request.params;
-    try {
-        const artista = await ArtistaService.encontrar_por_nome(nome);
-        response.status(statusHTTP.success).send(artista);
-    } catch (error) {
-        next(error);
-    } 
-});
-
-router.get('/:nome/musicas', async(request, response, next) => {
-    const { nome } = request.params;
-    try {
-        const musica = await ArtistaService.encontrar_musica(nome);
-        response.status(statusHTTP.success).send(musica);
-    } catch (error) {
-        next(error);
-    }
-});
-
 router.post('/', async(request, response, next) => {
     const body = request.body;
     try {
@@ -54,23 +34,11 @@ router.put('/:id', async(request, response, next) => {
 router.delete('/:id', async(request, response, next) => {
     const { id } = request.params;
     try {
-        await ArtistaService.deletar_por_id(id);
+        await ArtistaService.deletar(id);
         return response.status(statusHTTP.no_content).send();
     } catch (error) {
         next(error);
     }
-}); 
-
-/*não sei se faz sentido, já que será uma rota de admin
-router.delete('/:nome', async(request, response, next) => {
-    const { nome } = request.params;
-    try {
-        await ArtistaService.deletar_por_nome(nome);
-        return response.status(statusHTTP.no_content).send(); 
-    } catch (error) {
-        next(error);
-    }
-});
-*/
+});   
 
 module.exports = router;

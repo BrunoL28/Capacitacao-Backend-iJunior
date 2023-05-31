@@ -1,86 +1,101 @@
 const Artista = require('../models/Artista');
-const Musica = require('../../musicas/models/Musica');
+const QueryError = require('../../../../errors/QueryError');
+const InvalidParamError = require('../../../../errors/InvalidParamError');
 
 class ArtistaService {
     
+    /**
+     * Função que retorna todos os artistas existentes.
+     * @returns Artista
+     */
+
     async retorno() {
-        return await Artista.findAll();
+        const artistas = await Artista.findAll();
+        if( artistas.lenght === 0) {
+            throw new QueryError('Nenhum artista encontrado');
+        } 
+        return artistas;
+    }
+
+    /**
+     * Função que verifica se um artista já existe checando seu nome.
+     * @param {*} body 
+     * @returns boolean
+     */
+
+    async verificacao(body) {
+        let check = false;
+        const artista = await Artista.findOne( { where: {nome: body.nome }} );
+        if (artista) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
     }
     
+    /**
+     * Função responsável por criar um artista, caso seus atributos não estejam vazios
+     * ou ele não exista.
+     * @param {*} body 
+     */
+
     async criacao(body) {
-        try {
-            const artista = await Artista.findOne( { where: {nome: body.nome }} );
-            if (artista) {
-                throw new Error('Esse artista já existe');
-            }
-            await Artista.create(body);
-        } catch (erro) {
-            throw new Error(erro.message);
+        if (body.nome === '' || body.nacionalidade === '' || body.foto === '') {
+            throw new QueryError('Informações de artista incompletas');
         }
+        if (this.verificacao(body) === true) {
+            throw new InvalidParamError('Esse artista já existe');
+        }
+        await Artista.create(body);
     }
 
-    async encontrar_por_id(id) {
-        try {
-            const artista = await Artista.findByPk(id);
-            if (!artista) {
-                throw new Error('Artista não foi encontrado');
-            }
-            return artista;
-        } catch (erro) {
-            throw new Error(erro.message);
+    /**
+     * Função que encontra um artista por seu id
+     * @param {*} id 
+     * @returns Artista
+     */
+
+    async encontrar(id) {
+        const artista = await Artista.findByPk(id);
+        if (!artista) {
+            throw new QueryError('Artista não foi encontrado');
         }
+        return artista;
     }
 
-    async encontrar_por_nome(nome) {
-        try {
-            const artista = await Artista.findOne({ where: { nome: `${nome}`}});
-            if(!artista){
-                throw new Error('Artista não foi encontrado');
-            }
-            return artista;
-        }catch (erro) {
-            throw new Error(erro.message);
-        }
-    }
-
-    async encontrar_musica(nome) {
-        try {
-            const artista = await Artista.findOne({ where: { nome: nome}, include: [Musica]} );
-            if(!artista) {
-                throw new Error('Artista não foi econtrado');
-            }
-            return artista.Musicas;
-        } catch (erro) {
-            throw new Error(erro.message);
-        }
-    }
+    /**
+     * Função que atualiza informações de um artista, verificando antes se o id passado como parâmetro está
+     * ligado a um artista, e depois se as entradas sao válidas. Após isso, atualiza o artista com as informações
+     * passadas em att_artista e retorna um artista com os atributos atualizados.
+     * @param {*} id 
+     * @param {*} att_artista 
+     * @returns Artista
+     */
 
     async atualizar(id, att_artista) {
-        try {
-            const artista = await this.encontrar_por_id(id);
-            const artistaAtualizado = await artista.update(att_artista);
-            return artistaAtualizado;
-        } catch (erro) {
-            throw new Error(erro.message);
+        const artista = await this.encontrar(id);
+        if (artista === null) {
+            throw new InvalidParamError('Nenhum artista encontrado');
         }
+        if (att_artista.nome === '' || att_artista.nacionalidade === '' || att_artista.foto === '') {
+            throw new QueryError('Informações de artista incompletas');
+        }
+        const artistaAtualizado = await artista.update(att_artista, { where: { id: id }});
+        return artistaAtualizado;
     }
 
-    async deletar_por_id(id) {
-        try {
-            const artista = await this.encontrar_por_id(id);
-            await artista.destroy();
-        } catch (erro) {
-            throw new Error(erro.message);
-        }
-    }
+    /**
+     * Função que recebe um id como parâmetro e deleta o artista ligado a esse id.
+     * @param {*} id 
+     */
 
-    async deletar_por_nome(nome) {
-        try {
-            const artista = await this.encontrar_por_nome(nome);
-            await artista.destroy();
-        } catch (erro) {
-            throw new Error(erro.message);
+    async deletar(id) {
+        const artista = await this.encontrar(id);
+        if(artista === null) {
+            throw new InvalidParamError('Nenhum artista encontrado');
         }
+        await artista.destroy();
     }
 }
 

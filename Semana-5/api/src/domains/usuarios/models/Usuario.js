@@ -1,5 +1,6 @@
 const sequelize = require('../../../../database/Index');
 const { DataTypes } = require('sequelize');
+const cargos = require('../../../../constants/cargos');
 
 const Usuario = sequelize.define('Usuario', {
     id: {
@@ -21,7 +22,9 @@ const Usuario = sequelize.define('Usuario', {
         allowNull: false,
     },
     cargo: {
-        type: DataTypes.ENUM('admin', 'user'),
+        type: DataTypes.ENUM,
+        values: [cargos.ADMIN, cargos.USER],
+        defaultValue: cargos.USER,
         allowNull: false,
     },
 });

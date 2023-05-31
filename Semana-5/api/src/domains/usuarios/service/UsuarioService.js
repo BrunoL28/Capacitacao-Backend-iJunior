@@ -1,46 +1,95 @@
 const Usuario = require('../models/Usuario');
-
+const QueryError = require('../../../../errors/QueryError');
+const InvalidParamError = require('../../../../errors/InvalidParamError');
 class UsuarioService {
     
+    /**
+     * Função que retorna todos os usuários existentes.
+     * @returns Usuario
+     */
+
     async retorno() {
-        return await Usuario.findAll();
+        const usuarios = await Usuario.findAll();
+        if (usuarios.lenght === 0) {
+            throw new QueryError('Nenhum usuário encontrado');
+        }
+        return usuarios;
     }
     
+    /**
+     * Função que verifica se um usuário já existe checando seu nome.
+     * @param {*} body 
+     * @returns boolean
+     */
+
+    async verificacao(body) {
+        let check = false;
+        const usuario = await Usuario.findOne( { where: { nome: body.nome }} );
+        if (usuario) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
+
+    /**
+     * Função responsável por criar um usuário, caso seus atributos não estejam vazios
+     * ou ele não exista.
+     * @param {*} body 
+     */
+
     async criacao(body) {
-        console.log('Entrou no Service');
-        console.log(body);
+        if (body.nome === '' || body.email === '' || body.senha == '' || body.cargo === '') {
+            throw new QueryError('Informações de artista incompletas');
+        }
+        if (this.verificacao(body) === true) {
+            throw new InvalidParamError('Esse usuário já existe');
+        }
         await Usuario.create(body);
     }
 
+    /**
+     * Função que encontra um usuário por seu id.
+     * @param {*} id 
+     * @returns Usuario
+     */
+
     async encontrar(id) {
-        try {
-            const usuario = await Usuario.findByPk(id);
-            if (!usuario) {
-                throw new Error('Usuário não foi encontrado');
-            }
-            return usuario;
-        } catch (erro) {
-            throw new Error(erro.mensage);
+        const usuario = await Usuario.findByPk(id);
+        if (!usuario) {
+            throw new QueryError('Usuário não foi encontrado');
         }
+        return usuario;
     }
 
+    /**
+     * Função que atualiza informações de um usuário, verificando antes se o id passado como parâmetro está
+     * ligado a um usuário, e depois se as entradas sao válidas. Após isso, atualiza o usuário com as informações
+     * passadas em att_usuario e retorna um usuario com os atributos atualizados.
+     * @param {*} id 
+     * @param {*} att_usuario 
+     * @returns Usuario
+     */
+
     async atualizar(id, att_usuario) {
-        try {
-            const usuario = await this.encontrar(id);
-            const usuarioAtualizado = await usuario.update(att_usuario);
-            return usuarioAtualizado;
-        } catch (erro) {
-            throw new Error(erro.mensage);
+        const usuario = await this.encontrar(id);
+        if (usuario === null) {
+            throw new InvalidParamError('Nenhum usuário foi encontrado');
         }
+        if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargp === '') {
+            throw new QueryError('Informações de usuário incompletas');
+        }
+        const usuarioAtualizado = await usuario.update(att_usuario, { where: { id: id } });
+        return usuarioAtualizado;
     }
 
     async deletar(id) {
-        try {
-            const usuario = await this.encontrar(id);
-            await usuario.destroy();
-        } catch (erro) {
-            throw new Error(erro.mensage);
+        const usuario = await this.encontrar(id);
+        if (usuario === null) {
+            throw new InvalidParamError('Nenhum usuário foi encontrado');
         }
+        await usuario.destroy();
     }
 }
 

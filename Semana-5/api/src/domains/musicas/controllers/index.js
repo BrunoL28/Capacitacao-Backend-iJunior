@@ -11,17 +11,6 @@ router.get('/', async(request, response, next) => {
     }
 });
 
-router.get('/:titulo', async(request, response, next) => {
-    const { titulo } = request.params;
-    try {
-        const musica = await MusicaService.encontrar_por_titulo(titulo);
-        return response.status(statusHTTP.success).json(musica);
-    } catch (error) {
-        next(error);
-    }
-});
-
-
 router.post('/', async(request, response, next) => {
     const body = request.body;
     try {
@@ -45,23 +34,11 @@ router.put('/:id', async(request, response, next) => {
 router.delete('/:id', async(request, response, next) => {
     const { id } = request.params;
     try {
-        await MusicaService.deletar_por_id(id);
+        await MusicaService.deletar(id);
         return response.status(statusHTTP.no_content).send();
     } catch (error) {
         next(error);
     }
 });
-
-/* não sei se faz sentido, já que será um rota de admin
-router.delete('/:titulo', async(request, response, next) => {
-    const { titulo } = request.params;
-    try {
-        await MusicaService.deletar_por_titulo(titulo);
-        return response.status(statusHTTP.no_content).send();
-    } catch (error) {
-        next(error);
-    }
-});
-*/
 
 module.exports = router;

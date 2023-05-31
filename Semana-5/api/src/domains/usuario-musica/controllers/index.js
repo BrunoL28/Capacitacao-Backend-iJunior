@@ -43,10 +43,10 @@ router.post('/', async(request, response, next) => {
     }
 });
 
-router.delete('/musicas/:id', async(request, response, next) => {
+router.delete('/:id', async(request, response, next) => {
     const { id } = request.params;
     try {
-        await MusicaService.deletar_por_id(id);
+        await MusicaService.deletar(id);
         response.status(statusHTTP.no_content).send();
     } catch (error) {
         next(error);
