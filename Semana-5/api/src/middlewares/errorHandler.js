@@ -1,22 +1,32 @@
 const statusHTTP = require('../../constants/statusHTTP');
-const ErroDeConsulta = require('../../errors/ErroDeConsulta');
-const ErroDeParametro = require('../../errors/ErroDeParametro');
-const ErroDePermissao = require('../../errors/ErroDePermissao');
+const InvalidParamError = require('../../errors/InvalidParamError');
+const NotAuthorizedError = require('../../errors/NotAuthorizedError');
+const PermissionError = require('../../errors/PermissionError');
+const QueryError = require('../../errors/QueryError');
+const TokenError = require('../../errors/TokenError');
 
 function errorHandler(error, request, response, next) {
     let message = error.message;
     let status = statusHTTP.internal_server_error;
 
-    if (Error instanceof ErroDeConsulta){
+    if (Error instanceof InvalidParamError){
         status = statusHTTP.bad_request;
     }
 
-    if (Error instanceof ErroDeParametro){
-        status = statusHTTP.bad_request;
+    if (Error instanceof NotAuthorizedError){
+        status = statusHTTP.forbidden;
     }
 
-    if (Error instanceof ErroDePermissao){
+    if (Error instanceof PermissionError){
         status = statusHTTP.unauthorized;
+    }
+
+    if (Error instanceof QueryError) {
+        status = statusHTTP.bad_request;
+    }
+
+    if (Error instanceof TokenError) {
+        status = statusHTTP.not_found;
     }
 
     console.log(error);
