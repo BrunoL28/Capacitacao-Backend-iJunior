@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const UsuarioService = require('../service/UsuarioService');
 const statusHTTP = require('../../../../constants/statusHTTP');
+const Cargo = require('../../../../constants/cargos');
+const checkRole = require('../../../middlewares/checkRole');
 
-router.get('/', async(request, response, next) => {
+router.get('/', checkRole([Cargo.ADMIN]), async(request, response, next) => {
     try {
         const usuarios = await UsuarioService.retorno();
         return response.status(statusHTTP.success).json(usuarios);
@@ -22,9 +24,8 @@ router.post('/', async(request, response, next) => {
 });
 
 router.put('/:id', async(request, response, next) => {
-    const { id } = request.params;
     try {
-        const usuario_atualizado = await UsuarioService.atualizar(id, request.body);
+        const usuario_atualizado = await UsuarioService.atualizar(request.params.id, request.body);
         return response.status(statusHTTP.success).json(usuario_atualizado);
     } catch (error) {
         next(error);
@@ -32,9 +33,8 @@ router.put('/:id', async(request, response, next) => {
 });
 
 router.delete('/:id', async(request, response, next) => {
-    const { id } = request.params;
     try {
-        await UsuarioService.deletar(id);
+        await UsuarioService.deletar(request.params.id);
         return response.status(statusHTTP.no_content).send();
     } catch (error) {
         next(error);

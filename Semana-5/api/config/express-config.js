@@ -28,6 +28,7 @@ const usuariomusicaRouter = require('../src/domains/usuario-musica/controllers/i
 app.use('/api/usuariomusica', usuariomusicaRouter);
 
 const errorHandler = require('../src/middlewares/errorHandler');
+
 app.use(errorHandler);
 
 module.exports = app;

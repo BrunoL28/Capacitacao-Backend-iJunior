@@ -1,6 +1,7 @@
 const Usuario = require('../models/Usuario');
 const QueryError = require('../../../../errors/QueryError');
 const InvalidParamError = require('../../../../errors/InvalidParamError');
+const PermissionError = require('../../../../errors/PermissionError');
 class UsuarioService {
     
     /**
@@ -24,7 +25,7 @@ class UsuarioService {
 
     async verificacao(body) {
         let check = false;
-        const usuario = await Usuario.findOne( { where: { nome: body.nome }} );
+        const usuario = await Usuario.findOne( { where: { email: body.email }} );
         if (usuario) {
             check = true;
         } else {
@@ -45,8 +46,15 @@ class UsuarioService {
         }
         if (this.verificacao(body) === true) {
             throw new InvalidParamError('Esse usuário já existe');
+        } else {
+            const usuario = {
+                nome: body.nome,
+                email: body.email,
+                senha: body.senha,
+                cargo: body.cargo,
+            };
+            await Usuario.create(usuario);
         }
-        await Usuario.create(body);
     }
 
     /**
@@ -74,6 +82,9 @@ class UsuarioService {
 
     async atualizar(id, att_usuario) {
         const usuario = await this.encontrar(id);
+        if (usuario.cargo !== 'user') {
+            throw new PermissionError('Cargo inválido');
+        }
         if (usuario === null) {
             throw new InvalidParamError('Nenhum usuário foi encontrado');
         }
