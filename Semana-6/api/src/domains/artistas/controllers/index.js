@@ -2,9 +2,11 @@ const router = require('express').Router();
 const ArtistaService = require('../service/ArtistaService');
 const statusHTTP = require('../../../../constants/statusHTTP');
 const Cargo = require('../../../../constants/cargos');
-const checkRole = require('../../../middlewares/checkRole');
+const {
+    verifyJWT,
+    checkRole } = require('../../../middlewares/authMiddleware');
 
-router.get('/', async(request, response, next) => {
+router.get('/', verifyJWT, async(request, response, next) => {
     try {
         const artistas = await ArtistaService.retorno();
         return response.status(statusHTTP.success).send(artistas);
@@ -13,7 +15,7 @@ router.get('/', async(request, response, next) => {
     }
 });
 
-router.post('/', async(request, response, next) => {
+router.post('/', verifyJWT, async(request, response, next) => {
     const body = request.body;
     try {
         await ArtistaService.criacao(body);
@@ -23,7 +25,7 @@ router.post('/', async(request, response, next) => {
     }
 });
 
-router.put('/:id', checkRole([Cargo.ADMIN]),async(request, response, next) => {
+router.put('/:id', verifyJWT, checkRole([Cargo.ADMIN]),async(request, response, next) => {
     try {
         const artista_atualizado = await ArtistaService.atualizar(request.params.id, request.body);
         return response.status(statusHTTP.success).json(artista_atualizado);
@@ -32,7 +34,7 @@ router.put('/:id', checkRole([Cargo.ADMIN]),async(request, response, next) => {
     }
 });
 
-router.delete('/:id', checkRole([Cargo.ADMIN]),async(request, response, next) => {
+router.delete('/:id', verifyJWT, checkRole([Cargo.ADMIN]),async(request, response, next) => {
     try {
         await ArtistaService.deletar(request.params.id);
         return response.status(statusHTTP.no_content).send();

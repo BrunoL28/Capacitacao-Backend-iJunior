@@ -2,8 +2,9 @@ const router = require('express').Router();
 const UsuarioMusicaService = require('../service/UsuarioMusicaService');
 const statusHTTP = require('../../../../constants/statusHTTP');
 const MusicaService = require('../../musicas/service/MusicaService');
+const { verifyJWT } = require('../../../middlewares/authMiddleware');
 
-router.get('/', async(request, response, next) => {
+router.get('/', verifyJWT, async(request, response, next) => {
     try {
         const usuariosmusicas = await UsuarioMusicaService.retorno();
         return response.status(statusHTTP.success).send(usuariosmusicas);
@@ -12,7 +13,7 @@ router.get('/', async(request, response, next) => {
     }
 });
 
-router.get('/usuarios/:id', async(request, response, next) => {
+router.get('/usuarios/:id', verifyJWT, async(request, response, next) => {
     const { id } = request.params;
     try {
         const musicas = await UsuarioMusicaService.encontrar_musica(id);
@@ -22,7 +23,7 @@ router.get('/usuarios/:id', async(request, response, next) => {
     }
 });
 
-router.get('/musicas/:id', async(request, response, next) => {
+router.get('/musicas/:id', verifyJWT, async(request, response, next) => {
     const { id } = request.params;
     try {
         const usuarios = await UsuarioMusicaService.encontrar_usuario(id);
@@ -32,7 +33,7 @@ router.get('/musicas/:id', async(request, response, next) => {
     }
 });
 
-router.post('/', async(request, response, next) => {
+router.post('/', verifyJWT, async(request, response, next) => {
     const { id } = request.params;
     const { id_usuario } = request.usuario.id;
     try {
@@ -43,7 +44,7 @@ router.post('/', async(request, response, next) => {
     }
 });
 
-router.delete('/:id', async(request, response, next) => {
+router.delete('/:id', verifyJWT, async(request, response, next) => {
     const { id } = request.params;
     try {
         await MusicaService.deletar(id);

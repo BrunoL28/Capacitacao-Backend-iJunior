@@ -2,8 +2,21 @@ const Usuario = require('../models/Usuario');
 const QueryError = require('../../../../errors/QueryError');
 const InvalidParamError = require('../../../../errors/InvalidParamError');
 const PermissionError = require('../../../../errors/PermissionError');
+const bcrypt = require('bcrypt');
 class UsuarioService {
     
+    /**
+     * Função que recebe uma senha e a retorna criptografada.
+     * @param {*} senha 
+     * @returns encryptedPassword
+     */
+
+    async encryptPassword(senha) {
+        const saltRounds = 10;
+        const encryptedPassword = await bcrypt.hash(senha, saltRounds);
+        return encryptedPassword;
+    }
+
     /**
      * Função que retorna todos os usuários existentes.
      * @returns Usuario
@@ -53,6 +66,8 @@ class UsuarioService {
                 senha: body.senha,
                 cargo: body.cargo,
             };
+
+            usuario.senha = await this.encryptPassword(body.senha);
             await Usuario.create(usuario);
         }
     }
@@ -85,11 +100,14 @@ class UsuarioService {
         if (usuario.cargo !== 'user') {
             throw new PermissionError('Cargo inválido');
         }
-        if (usuario === null) {
-            throw new InvalidParamError('Nenhum usuário foi encontrado');
-        }
         if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargp === '') {
             throw new QueryError('Informações de usuário incompletas');
+        }
+        if (att_usuario.senha) {
+            att_usuario.senha = await this.encryptPassword(att_usuario.senha);
+        }
+        if (usuario === null) {
+            throw new InvalidParamError('Nenhum usuário foi encontrado');
         }
         const usuarioAtualizado = await usuario.update(att_usuario, { where: { id: id } });
         return usuarioAtualizado;
