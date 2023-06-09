@@ -1,0 +1,36 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsnd --respawn --transpileOnly index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.17",
+    "@types/http-errors": "^2.0.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.2.5",
+    "@types/sequelize": "^4.28.15",
+    "@types/sqlite3": "^3.1.8",
+    "@types/urlencode": "^1.1.2",
+    "@types/validator": "^13.7.17"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.42.0",
+    "eslint-plugin-react": "^7.32.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.3"
+  }
+}
