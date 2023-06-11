@@ -1,8 +1,6 @@
-class QueryError extends Error {
+export class QueryError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'QueryError';
     }
 }
-
-export default QueryError;

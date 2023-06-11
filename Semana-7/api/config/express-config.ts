@@ -33,6 +33,6 @@ app.use('/api/usuariomusica', usuariomusicaRouter);
 
 app.use(errorHandler);
 
-export default app;
+export default { app };
 
 

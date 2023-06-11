@@ -1,8 +1,6 @@
-class NotAuthorizedError extends Error {
+export class NotAuthorizedError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'NotAuthorizedError';
     }
 }
-
-export default NotAuthorizedError;

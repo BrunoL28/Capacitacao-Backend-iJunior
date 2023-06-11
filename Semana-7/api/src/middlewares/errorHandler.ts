@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import statusHTTP from '../../constants/statusHTTP';
-import InvalidParameterError from '../../errors/InvalidParamError';
-import NotAuthorizedError from '../../errors/NotAuthorizedError';
-import PermissionError from '../../errors/PermissionError';
-import QueryError from '../../errors/QueryError';
-import TokenError from '../../errors/TokenError';
+import { InvalidParamError } from '../../errors/InvalidParamError';
+import { NotAuthorizedError } from '../../errors/NotAuthorizedError';
+import { PermissionError } from '../../errors/PermissionError';
+import { QueryError } from '../../errors/QueryError';
+import { TokenError } from '../../errors/TokenError';
+import { statusHTTP } from '../../utils/constants/statusHTTP';
 
-function errorHandler (error: Error, request: Request, response: Response, next: NextFunction) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function errorHandler (error: Error, _request: Request, response: Response, _next: NextFunction) {
     // eslint-disable-next-line prefer-const
     let message = error.message;
     let status = statusHTTP.internal_server_error;
 
-    if (Error instanceof InvalidParameterError) {
+    if (Error instanceof InvalidParamError) {
         status = statusHTTP.bad_request;
     }
 
@@ -40,4 +41,5 @@ function errorHandler (error: Error, request: Request, response: Response, next:
     response.status(status).json(message);
 }
 
-export default errorHandler;
+export { errorHandler };
+
