@@ -45,14 +45,17 @@ class ArtistaServiceClass {
         if (body.nome === '' || body.nacionalidade === '' || body.foto === '') {
             throw new QueryError('Informações de artista incompletas!');
         }
+
         if (await this.verificacao(body) === true) {
             throw new InvalidParamError('Esse artista já existe!');
         }
+
         const artist = {
             nome: body.nome,
             nacionalidade: body.nacionalidade,
             foto: body.foto,
         };
+
         await Artista.create(artist);
     }
 

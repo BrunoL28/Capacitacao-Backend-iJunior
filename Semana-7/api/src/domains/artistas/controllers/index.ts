@@ -25,7 +25,7 @@ router.post('/', async(request: Request, response: Response, next: NextFunction)
     }
 });
 
-router.put('/id', async(request: Request, response: Response, next: NextFunction) => {
+router.put('/:id', async(request: Request, response: Response, next: NextFunction) => {
     try {
         const artistaAtualizado = await ArtistaService.atualizar(request.params.id, request.body);
         return response.status(statusHTTP.success).json(artistaAtualizado);
@@ -34,7 +34,7 @@ router.put('/id', async(request: Request, response: Response, next: NextFunction
     }
 });
 
-router.delete('/id', async(request: Request, response: Response, next: NextFunction) => {
+router.delete('/:id', async(request: Request, response: Response, next: NextFunction) => {
     try {
         await ArtistaService.deletar(request.params.id);
         return response.status(statusHTTP.no_content).send();
