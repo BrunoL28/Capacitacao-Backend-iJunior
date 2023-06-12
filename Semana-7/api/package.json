@@ -2,10 +2,10 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "build/index.ts",
   "scripts": {
-    "dev": "tsnd --respawn index.ts --ignore *.test.ts",
-    "test": "jest"
+    "dev": "tsnd --respawn --transpile-only index.ts --ignore *.test.ts",
+    "start": "tsnd --respawn --transpile-only index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -32,14 +32,15 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
+    "@types/sqlite3": "^3.1.8",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "jsonwebtoken": "^9.0.0",
-    "mysql2": "^2.3.3",
     "sequelize": "^6.21.3",
+    "sqlite3": "^5.1.6",
     "typescript": "^4.8.4"
   }
 }

@@ -1,4 +1,4 @@
-import { CreationOptional, DataTypes, HasManyAddAssociationMixin, HasManyRemoveAssociationMixin, InferAttributes, InferCreationAttributes, Model } from 'sequelize/types';
+import { CreationOptional, DataTypes, HasManyAddAssociationMixin, HasManyRemoveAssociationMixin, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { sequelize } from '../../../../database/Index';
 import { Artista } from '../../artistas/models/Artista';
 import { UsuarioInterface } from '../../usuarios/models/Usuario';

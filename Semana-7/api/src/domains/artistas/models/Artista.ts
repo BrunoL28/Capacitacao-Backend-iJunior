@@ -1,4 +1,4 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize/types';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { sequelize } from '../../../../database/Index';
 
 export interface ArtistaInterface extends Model<InferAttributes<ArtistaInterface>, InferCreationAttributes<ArtistaInterface>> {
@@ -39,7 +39,7 @@ export const Artista = sequelize.define<ArtistaInterface>('Artist', {
     },
 });
 
-Artista.sync({alter: false, force: false})
+Artista.sync({alter: true, force: false})
     .then(() => {
         console.log('Artist table was (re)created');
     })

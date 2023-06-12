@@ -93,6 +93,11 @@ class MusicaServiceClass {
         return musicaAtualizada;
     }
 
+    /**
+     * Função que deleta uma música pelo seu id.
+     * @param id 
+     */
+
     async deletar(id: string) {
         const musica = await this.encontrar(id);
         if (musica === null) {

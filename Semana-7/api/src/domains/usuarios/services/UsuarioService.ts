@@ -99,6 +99,11 @@ class UsuarioServiceClass {
         return usuarioAtualizado;
     }
 
+    /**
+     * Função que deleta um usuário com base em seu id.
+     * @param id 
+     */
+
     async deletar(id: string) {
         const usuario = await this.encontrar(id);
         if (usuario === null) {

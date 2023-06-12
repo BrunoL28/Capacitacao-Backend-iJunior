@@ -37,7 +37,7 @@ router.put('/:id', async(request: Request, response: Response, next: NextFunctio
 router.delete('/:id', async(request: Request, response: Response, next: NextFunction) => {
     try {
         await MusicaService.deletar(request.params.id);
-        return response.status(statusHTTP.no_content).send();
+        return response.status(statusHTTP.no_content).end();
     } catch (error) {
         next(error);
     }
