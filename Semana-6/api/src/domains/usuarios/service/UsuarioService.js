@@ -24,7 +24,7 @@ class UsuarioService {
 
     async retorno() {
         const usuarios = await Usuario.findAll();
-        if (usuarios.lenght === 0) {
+        if (usuarios.length === 0) {
             throw new QueryError('Nenhum usuário encontrado');
         }
         return usuarios;
