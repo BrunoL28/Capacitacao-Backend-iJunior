@@ -53,7 +53,7 @@ class UsuarioMusicaService {
                 through: { attributes: [] },
             }
         });
-        if (musicas.lenght === 0) {
+        if (musicas.length === 0) {
             throw new QueryError('Nenhuma música encontrada através do artista');
         }
         return musicas;
@@ -73,7 +73,7 @@ class UsuarioMusicaService {
                 through: { attributes: [] },
             }
         });
-        if (usuarios.lenght === 0) {
+        if (usuarios.length === 0) {
             throw new QueryError('Nenhum usuário foi encontrado através da música');
         }
         return usuarios;
