@@ -15,7 +15,7 @@ class UsuarioMusicaService {
 
     async retorno() {
         const usuarios_musicas = await UsuarioMusica.findAll();
-        if (usuarios_musicas.lenght === 0) {
+        if (usuarios_musicas.length === 0) {
             throw new QueryError('Nenhum usuário favoritou essa música');
         }
         return usuarios_musicas;
