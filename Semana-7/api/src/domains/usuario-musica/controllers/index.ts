@@ -3,9 +3,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 export const router = Router();
 
 import { statusHTTP } from '../../../../utils/constants/statusHTTP';
+import { verifyJWT } from '../../../middlewares/auth-Middleware';
 import { UsuarioMusicaService } from '../services/UsuarioMusicaService';
 
-router.get('/', async(request: Request, response: Response, next: NextFunction) => {
+router.get('/', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     try {
         const usuariosmusicas = await UsuarioMusicaService.retorno();
         return response.status(statusHTTP.success).send(usuariosmusicas);
@@ -14,7 +15,7 @@ router.get('/', async(request: Request, response: Response, next: NextFunction) 
     }
 });
 
-router.get('/usuarios/:id',  async(request: Request, response: Response, next: NextFunction) => {
+router.get('/usuarios/:id', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     const { id } = request.params;
     try {
         const musicas = await UsuarioMusicaService.encontrar_musica(id);
@@ -24,7 +25,7 @@ router.get('/usuarios/:id',  async(request: Request, response: Response, next: N
     }
 });
 
-router.get('/musicas/:id',  async(request: Request, response: Response, next: NextFunction) => {
+router.get('/musicas/:id', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     const { id } = request.params;
     try {
         const usuarios = await UsuarioMusicaService.encontrar_usuario(id);
@@ -34,7 +35,7 @@ router.get('/musicas/:id',  async(request: Request, response: Response, next: Ne
     }
 });
 
-router.post('/', async(request: Request, response: Response, next: NextFunction) => {
+router.post('/', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     try {
         await UsuarioMusicaService.criacao_usuario_musica(request.usuario!.id, request.params.id!);
         response.status(statusHTTP.created).json({ message: 'UsuarioMusica criado com sucesso' }).end();
@@ -43,7 +44,7 @@ router.post('/', async(request: Request, response: Response, next: NextFunction)
     }
 });
 
-router.delete('/:id', async(request: Request, response: Response, next: NextFunction) => {
+router.delete('/:id', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     try {
         await UsuarioMusicaService.deletar(request.usuario!.id, request.params.id!);
         response.status(statusHTTP.no_content).end();

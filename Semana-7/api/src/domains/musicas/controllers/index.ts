@@ -2,11 +2,13 @@ import { NextFunction, Request, Response, Router } from 'express';
 
 export const router = Router();
 
+import { cargo } from '../../../../utils/constants/cargo';
 import { statusHTTP } from '../../../../utils/constants/statusHTTP';
+import { checkRole, verifyJWT } from '../../../middlewares/auth-Middleware';
 import { MusicaService } from '../service/MusicaService';
 
 
-router.get('/', async(request: Request, response: Response, next: NextFunction) => {
+router.get('/', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     try {
         const musicas = await MusicaService.retorno();
         return response.status(statusHTTP.success).send(musicas);
@@ -15,7 +17,7 @@ router.get('/', async(request: Request, response: Response, next: NextFunction) 
     }
 });
 
-router.post('/', async(request: Request, response: Response, next: NextFunction) => {
+router.post('/', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     const body = request.body;
     try {
         await MusicaService.criacao(body);
@@ -25,7 +27,7 @@ router.post('/', async(request: Request, response: Response, next: NextFunction)
     }
 });
 
-router.put('/:id', async(request: Request, response: Response, next: NextFunction) => {
+router.put('/:id', verifyJWT, async(request: Request, response: Response, next: NextFunction) => {
     try {
         const musicaAtualizada = await MusicaService.atualizar(request.params.id, request.body);
         return response.status(statusHTTP.success).json(musicaAtualizada);
@@ -34,7 +36,7 @@ router.put('/:id', async(request: Request, response: Response, next: NextFunctio
     }
 });
 
-router.delete('/:id', async(request: Request, response: Response, next: NextFunction) => {
+router.delete('/:id', verifyJWT, checkRole([cargo.ADMIN]), async(request: Request, response: Response, next: NextFunction) => {
     try {
         await MusicaService.deletar(request.params.id);
         return response.status(statusHTTP.no_content).end();

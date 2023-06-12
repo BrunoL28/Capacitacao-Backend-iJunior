@@ -1,11 +1,27 @@
+import { hash } from 'bcrypt';
 import { Attributes } from 'sequelize';
 import { InvalidParamError } from '../../../../errors/InvalidParamError';
+import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { PermissionError } from '../../../../errors/PermissionError';
 import { QueryError } from '../../../../errors/QueryError';
+import { cargo } from '../../../../utils/constants/cargo';
 import { Usuario, UsuarioInterface } from '../models/Usuario';
+import { PayloadParams } from '../types/PayloadParams';
 
 class UsuarioServiceClass {
     
+    /**
+     * Função que encripta uma senha utilizando algoritmo hash.
+     * @param senha 
+     * @returns senha: string
+     */
+
+    async encryptPassword(senha: string) {
+        const saltRounds = 10;
+        const encryptedPassword = await hash(senha, saltRounds);
+        return encryptedPassword;
+    }
+
     /**
      * Função que retorna todos os usuários existentes.
      * @returns Usuario
@@ -43,6 +59,10 @@ class UsuarioServiceClass {
      */
 
     async criacao(body: Attributes<UsuarioInterface>) {
+        if (body.cargo == cargo.ADMIN) {
+            throw new PermissionError('Não é possível criar uma conta com o cargo de administrador!');
+        }
+
         if (body.nome === '' || body.email === '' || body.senha == '' || body.cargo === '') {
             throw new QueryError('Informações de artista incompletas');
         }
@@ -57,6 +77,7 @@ class UsuarioServiceClass {
                 cargo: body.cargo,
             };
 
+            usuario.senha = await this.encryptPassword(usuario.senha);
             await Usuario.create(usuario);
         }
     }
@@ -84,10 +105,13 @@ class UsuarioServiceClass {
      * @returns Usuario
      */
 
-    async atualizar(id: string, att_usuario: Attributes<UsuarioInterface>) {
+    async atualizar(id: string, att_usuario: Attributes<UsuarioInterface>, usuarioLogado: PayloadParams) {
         const usuario = await this.encontrar(id);
-        if (usuario.cargo !== 'user') {
-            throw new PermissionError('Cargo inválido');
+        if (usuarioLogado.cargo != cargo.ADMIN && usuarioLogado.id != id) {
+            throw new NotAuthorizedError('Você não possui a permissão necessária para editar outro usuário!');
+        }
+        if (att_usuario.cargo && usuarioLogado.cargo != cargo.ADMIN && usuarioLogado.cargo != att_usuario.cargo ) {
+            throw new NotAuthorizedError('Você não possui a permissão necessária para editar seu próprio cargo!');
         }
         if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargo === '') {
             throw new QueryError('Informações de usuário incompletas');
@@ -95,6 +119,10 @@ class UsuarioServiceClass {
         if (usuario === null) {
             throw new InvalidParamError('Nenhum usuário foi encontrado');
         }
+        if(att_usuario.senha) {
+            att_usuario.senha = await this.encryptPassword(att_usuario.senha);
+        }
+
         const usuarioAtualizado = await usuario.update(att_usuario, { where: { id: id } });
         return usuarioAtualizado;
     }
@@ -104,7 +132,10 @@ class UsuarioServiceClass {
      * @param id 
      */
 
-    async deletar(id: string) {
+    async deletar(id: string, selfId: string) {
+        if (selfId == id) {
+            throw new PermissionError('Você não pode deletar seu próprio usuário!');
+        }
         const usuario = await this.encontrar(id);
         if (usuario === null) {
             throw new InvalidParamError('Nenhum usuário foi encontrado');
