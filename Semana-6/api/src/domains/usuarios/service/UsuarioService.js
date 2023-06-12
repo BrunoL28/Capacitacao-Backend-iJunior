@@ -100,7 +100,7 @@ class UsuarioService {
         if (usuario.cargo !== 'user') {
             throw new PermissionError('Cargo inválido');
         }
-        if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargp === '') {
+        if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargo === '') {
             throw new QueryError('Informações de usuário incompletas');
         }
         if (att_usuario.senha) {
