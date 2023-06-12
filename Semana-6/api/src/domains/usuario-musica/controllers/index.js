@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const UsuarioMusicaService = require('../service/UsuarioMusicaService');
 const statusHTTP = require('../../../../constants/statusHTTP');
-const MusicaService = require('../../musicas/service/MusicaService');
 const { verifyJWT } = require('../../../middlewares/authMiddleware');
 
 router.get('/', verifyJWT, async(request, response, next) => {
@@ -47,8 +46,8 @@ router.post('/', verifyJWT, async(request, response, next) => {
 router.delete('/:id', verifyJWT, async(request, response, next) => {
     const { id } = request.params;
     try {
-        await MusicaService.deletar(id);
-        response.status(statusHTTP.no_content).send();
+        await UsuarioMusicaService.deletar(id);
+        response.status(statusHTTP.no_content).end();
     } catch (error) {
         next(error);
     }
