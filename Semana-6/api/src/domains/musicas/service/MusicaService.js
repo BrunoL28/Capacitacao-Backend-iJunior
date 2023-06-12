@@ -25,7 +25,7 @@ class MusicaService {
 
     async verificacao(body) {
         let check = false;
-        const musica = await Musica.findOne( { where: { titulo: body.nome } } );
+        const musica = await Musica.findOne( { where: { titulo: body.titulo } });
         if (musica) {
             check = true;
         } else {
@@ -43,7 +43,7 @@ class MusicaService {
         if (body.foto === '' || body.titulo === '' || body.artistaId == '' || body.categoria === '') {
             throw new QueryError('Informações de música incompletas');
         }
-        if (this.verificacao(body) === true) {
+        if (await this.verificacao(body) === true) {
             throw new InvalidParamError('Essa música já existe');
         }
         await Musica.create(body);
