@@ -36,7 +36,6 @@ export const Usuario = sequelize.define<UsuarioInterface>('Usuario', {
         type: DataTypes.ENUM,
         values: [cargo.ADMIN, cargo.USER],
         allowNull: false,
-        defaultValue: cargo.USER,
     },
     createdAt: {
         type: DataTypes.DATE,

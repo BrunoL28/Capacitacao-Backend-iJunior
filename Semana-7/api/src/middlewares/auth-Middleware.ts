@@ -86,6 +86,7 @@ export function notLoggedIn(request: Request, response: Response, next: NextFunc
 export const checkRole = (cargos: string[]) => {
     return (request: Request, response: Response, next: NextFunction) => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ! cargos.includes(request.usuario!.cargo) ? response.json('Você não possui permissão para realizar essa ação!') : next();
         } catch (error) {
             next(error);

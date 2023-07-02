@@ -51,7 +51,7 @@ UsuarioMusica.belongsTo(Musica);
 Usuario.hasMany(UsuarioMusica);
 UsuarioMusica.belongsTo(Usuario);
 
-UsuarioMusica.sync({ alter: true, force: false})
+UsuarioMusica.sync({ alter: false, force: false})
     .then(() => {
         console.log('Tabela de UsuárioMusica foi (re)criada!');
     })

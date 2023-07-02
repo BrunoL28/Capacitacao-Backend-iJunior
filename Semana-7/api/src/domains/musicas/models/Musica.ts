@@ -51,7 +51,7 @@ export const Musica = sequelize.define<MusicaInterface>('Musica', {
 Musica.belongsTo(Artista, { foreignKey: 'artistaId' });
 Artista.hasMany(Musica, { foreignKey: 'artistaId' });
 
-Musica.sync({ alter: true, force: false})
+Musica.sync({ alter: false, force: false})
     .then(() => {
         console.log('Tabela de Músicas foi (re)criada.');
     })

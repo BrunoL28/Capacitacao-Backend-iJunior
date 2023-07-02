@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors, { CorsOptions } from 'cors';
 import dotenv from 'dotenv';
 import express, { Express } from 'express';
@@ -14,6 +15,8 @@ const options: CorsOptions = {
 
 app.use(cors(options));
 
+app.use(cookieParser());
+
 app.use(express.urlencoded({
     extended: true,
 }));
@@ -26,8 +29,8 @@ import { router as usuariomusicaRouter } from '../src/domains/usuario-musica/con
 import { router as usuariosRouter } from '../src/domains/usuarios/controllers/index';
 app.use('/api/artistas', artistasRouter);
 app.use('/api/musicas', musicasRouter);
-app.use('/api/usuariomusica', usuariomusicaRouter);
-app.use('/api/usuario', usuariosRouter);
+app.use('/api/usuariosmusicas', usuariomusicaRouter);
+app.use('/api/usuarios', usuariosRouter);
 
 import { errorHandler } from '../src/middlewares/errorHandler';
 

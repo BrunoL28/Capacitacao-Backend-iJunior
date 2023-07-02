@@ -16,7 +16,7 @@ class UsuarioServiceClass {
      * @returns senha: string
      */
 
-    async encryptPassword(senha: string) {
+    async encryptPassword(senha: string) : Promise<string> {
         const saltRounds = 10;
         const encryptedPassword = await hash(senha, saltRounds);
         return encryptedPassword;
@@ -42,14 +42,8 @@ class UsuarioServiceClass {
      */
 
     async verificacao(body: Attributes<UsuarioInterface>) : Promise<boolean> {
-        let check = false;
         const usuario = await Usuario.findOne( { where: { email: body.email }} );
-        if (usuario) {
-            check = true;
-        } else {
-            check = false;
-        }
-        return check;
+        return !!usuario;
     }
 
     /**
@@ -58,28 +52,25 @@ class UsuarioServiceClass {
      * @param {*} body 
      */
 
-    async criacao(body: Attributes<UsuarioInterface>) {
-        if (body.cargo == cargo.ADMIN) {
+    async criacao(body: Attributes<UsuarioInterface>) : Promise<void> {
+        if (body.cargo === cargo.ADMIN) {
             throw new PermissionError('Não é possível criar uma conta com o cargo de administrador!');
         }
-
         if (body.nome === '' || body.email === '' || body.senha == '' || body.cargo === '') {
             throw new QueryError('Informações de artista incompletas');
         }
-
-        if (await this.verificacao(body) === true) {
+        if (await this.verificacao(body)) {
             throw new InvalidParamError('Esse usuário já existe');
-        } else {
-            const usuario = {
-                nome: body.nome,
-                email: body.email,
-                senha: body.senha,
-                cargo: body.cargo,
-            };
-
-            usuario.senha = await this.encryptPassword(usuario.senha);
-            await Usuario.create(usuario);
         }
+        const usuario = {
+            nome: body.nome,
+            email: body.email,
+            senha: body.senha,
+            cargo: body.cargo,
+        };
+
+        usuario.senha = await this.encryptPassword(usuario.senha);
+        await Usuario.create(usuario);
     }
 
     /**
@@ -88,7 +79,7 @@ class UsuarioServiceClass {
      * @returns Usuario
      */
 
-    async encontrar(id: string) : Promise<UsuarioInterface>{
+    async encontrar(id: string) {
         const usuario = await Usuario.findByPk(id);
         if (!usuario) {
             throw new QueryError('Usuário não foi encontrado');
@@ -105,14 +96,14 @@ class UsuarioServiceClass {
      * @returns Usuario
      */
 
-    async atualizar(id: string, att_usuario: Attributes<UsuarioInterface>, usuarioLogado: PayloadParams) {
-        const usuario = await this.encontrar(id);
-        if (usuarioLogado.cargo != cargo.ADMIN && usuarioLogado.id != id) {
+    async atualizar(id: string, att_usuario: UsuarioInterface, usuarioLogado: PayloadParams) {
+        if (usuarioLogado.cargo !== cargo.ADMIN && usuarioLogado.id !== id) {
             throw new NotAuthorizedError('Você não possui a permissão necessária para editar outro usuário!');
         }
-        if (att_usuario.cargo && usuarioLogado.cargo != cargo.ADMIN && usuarioLogado.cargo != att_usuario.cargo ) {
+        if (att_usuario.cargo && usuarioLogado.cargo !== cargo.ADMIN && usuarioLogado.cargo !== att_usuario.cargo ) {
             throw new NotAuthorizedError('Você não possui a permissão necessária para editar seu próprio cargo!');
         }
+        const usuario = await this.encontrar(id);
         if ( att_usuario.nome === '' || att_usuario.email === '' || att_usuario.senha === '' || att_usuario.cargo === '') {
             throw new QueryError('Informações de usuário incompletas');
         }
@@ -123,7 +114,7 @@ class UsuarioServiceClass {
             att_usuario.senha = await this.encryptPassword(att_usuario.senha);
         }
 
-        const usuarioAtualizado = await usuario.update(att_usuario, { where: { id: id } });
+        const usuarioAtualizado = await usuario.update(att_usuario);
         return usuarioAtualizado;
     }
 
@@ -133,7 +124,7 @@ class UsuarioServiceClass {
      */
 
     async deletar(id: string, selfId: string) {
-        if (selfId == id) {
+        if (selfId === id) {
             throw new PermissionError('Você não pode deletar seu próprio usuário!');
         }
         const usuario = await this.encontrar(id);

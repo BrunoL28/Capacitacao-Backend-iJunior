@@ -10,7 +10,7 @@ export interface ArtistaInterface extends Model<InferAttributes<ArtistaInterface
   updatedAt: CreationOptional<Date>;
 }
 
-export const Artista = sequelize.define<ArtistaInterface>('Artist', {
+export const Artista = sequelize.define<ArtistaInterface>('Artista', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -39,8 +39,8 @@ export const Artista = sequelize.define<ArtistaInterface>('Artist', {
     },
 });
 
-Artista.sync({alter: true, force: false})
+Artista.sync({alter: false, force: false})
     .then(() => {
-        console.log('Artist table was (re)created');
+        console.log('Tabela de Artistas foi (re)criada.');
     })
     .catch((err) => console.log(err));
