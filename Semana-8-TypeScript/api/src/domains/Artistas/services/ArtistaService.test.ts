@@ -5,12 +5,12 @@ import { ArtistaService } from "./ArtistaService";
 
 jest.mock( "../models/Artista", () => ( { 
     Artista: {
-        getArtistas: jest.fn(),
-        getArtistaNome: jest.fn(),
-        getArtistaId: jest.fn(),
-        postArtista: jest.fn(),
-        putArtista: jest.fn(),
-        deleteArtista: jest.fn(),
+        findAll: jest.fn(),
+        findOne: jest.fn(),
+        findByPk: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+        destroy: jest.fn(),
     },
 } ) );
 
@@ -47,7 +47,7 @@ describe( "getArtistas", () => {
 
     test( "Método é chamado => Retorna um erro.", async() => {
         ( Artista.findAll as any ).mockResolvedValue( null );
-        await expect( ArtistaService.getArtistas() ).rejects.toThrow( new QueryError( "Não foi encontrado nenhum artista no cadastro!" ) );
+        await expect( ArtistaService.getArtistas() ).rejects.toThrow( new QueryError( "Nenhum artista foi encontrado!" ) );
     } );
 } );
 
@@ -81,7 +81,7 @@ describe( "getArtistaId", () => {
     test( "Método recebe um id que não existe => Retorna Erro.", async() => {
         const id = "1";
         ( Artista.findByPk as any ).mockResolvedValue( null );
-        await expect( ArtistaService.getArtistaId( id ) ).rejects.toThrow( new QueryError( `Não há um artista com o id ${id}` ) );
+        await expect( ArtistaService.getArtistaId( id ) ).rejects.toThrow( new QueryError( "Nenhum artista foi encontrado com esse id!" ) );
     } );
 } );
 
@@ -115,8 +115,9 @@ describe( "getArtistaNome", () => {
     } );
 
     test( "Método recebe um nome que não existe => Retorna Erro.", async() => {
-        const nome = "teste";
-        ( Artista.findOne as any ).rejects.toThrow( new QueryError( `Não há um artista com o nome ${nome}` ) );
+        const nome = "";
+        ( Artista.findOne as any ).mockResolvedValue( null );
+        await expect( ArtistaService.getArtistaNome( nome ) ).rejects.toThrow( new QueryError( "Nenhum artista foi encontrado com esse nome!" ) );
     } );
 } );
 
@@ -177,8 +178,8 @@ describe( "putArtista", () => {
         await ArtistaService.putArtista( id, mockUpdateArtista );
 
         expect( Artista.findByPk ).toHaveBeenCalledWith( id );
-        expect( Artista.update ).toHaveBeenCalledWith( mockUpdateArtista );
-        expect( Artista.update ).toHaveBeenCalledTimes( 1 );
+        expect( artista.update ).toHaveBeenCalledWith( mockUpdateArtista );
+        expect( artista.update ).toHaveBeenCalledTimes( 1 );
     } );
 } );
 
@@ -204,12 +205,12 @@ describe( "deleteArtista", () => {
         };
 
         ( Artista.findByPk as any).mockResolvedValue( artista );
-        ( Artista.destroy as any ).mockResolvedValue( {} );
+        ( Artista.destroy as any ).mockResolvedValue({});
 
         await ArtistaService.deleteArtista( id );
 
         expect( Artista.findByPk ).toHaveBeenCalledWith( id );
-        expect( Artista.destroy ).toHaveBeenCalledTimes( 1 );
+        expect( artista.destroy ).toHaveBeenCalledTimes( 1 );
     } );
 } );
 
