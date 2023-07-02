@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1688331920938" clover="3.2.0">
-  <project timestamp="1688331920939" name="All files">
-    <metrics statements="113" coveredstatements="23" conditionals="44" coveredconditionals="9" methods="23" coveredmethods="6" elements="180" coveredelements="38" complexity="0" loc="113" ncloc="113" packages="4" files="4" classes="4"/>
+<coverage generated="1688336089495" clover="3.2.0">
+  <project timestamp="1688336089495" name="All files">
+    <metrics statements="113" coveredstatements="46" conditionals="44" coveredconditionals="20" methods="23" coveredmethods="12" elements="180" coveredelements="78" complexity="0" loc="113" ncloc="113" packages="4" files="4" classes="4"/>
     <package name="Artistas.services">
       <metrics statements="25" coveredstatements="23" conditionals="11" coveredconditionals="9" methods="6" coveredmethods="6"/>
       <file name="ArtistaService.ts" path="C:\Users\bruno\OneDrive\Área de Trabalho\Desafios-Capacitacao\Semana-8-TypeScript\api\src\domains\Artistas\services\ArtistaService.ts">
@@ -34,34 +34,34 @@
       </file>
     </package>
     <package name="Musicas.services">
-      <metrics statements="25" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="25" coveredstatements="23" conditionals="13" coveredconditionals="11" methods="6" coveredmethods="6"/>
       <file name="MusicaService.ts" path="C:\Users\bruno\OneDrive\Área de Trabalho\Desafios-Capacitacao\Semana-8-TypeScript\api\src\domains\Musicas\services\MusicaService.ts">
-        <metrics statements="25" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="2" count="0" type="stmt"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="59" count="0" type="cond" truecount="0" falsecount="5"/>
+        <metrics statements="25" coveredstatements="23" conditionals="13" coveredconditionals="11" methods="6" coveredmethods="6"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="47" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="59" count="1" type="cond" truecount="4" falsecount="1"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="cond" truecount="4" falsecount="1"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
       </file>
     </package>
     <package name="UsuarioMusica.services">

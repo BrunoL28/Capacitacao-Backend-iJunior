@@ -95,7 +95,7 @@ describe( "getArtistaNome", () => {
         jest.clearAllMocks();
     } );
 
-    test( "Método é chamado => Retorna o artista com o nome especificado", async() => {
+    test( "Método é chamado => Retorna o artista com o nome especificado.", async() => {
         const nome = "teste";
         const mockArtista = {
             id: "1",
@@ -131,7 +131,7 @@ describe( "postArtista", () => {
         jest.clearAllMocks();
     } );
 
-    test( "Método recebe dados de um novo artista => Chama o create para criar o artista", async() => {
+    test( "Método recebe dados de um novo artista => Chama o create para criar o artista.", async() => {
         const mockCreateArtista = {
             nome: "teste",
             nacionalidade: "teste",
@@ -156,7 +156,7 @@ describe( "putArtista", () => {
         jest.clearAllMocks();
     } );
 
-    test( "Método recebe um id e um objeto com informações -> Atualiza o artista daquele id com as informações do objeto.", async() => {
+    test( "Método recebe um id e um objeto com informações => Atualiza o artista daquele id com as informações do objeto.", async() => {
         const id = "1";
 
         const mockUpdateArtista = {
@@ -193,7 +193,7 @@ describe( "deleteArtista", () => {
         jest.clearAllMocks();
     } );
 
-    test( "Método recebe um id -> Destrói o objeto referente ao id passado.", async() => {
+    test( "Método recebe um id => Destrói o objeto referente ao id passado.", async() => {
         const id = "1";
 
         const artista = {
@@ -205,7 +205,7 @@ describe( "deleteArtista", () => {
         };
 
         ( Artista.findByPk as any).mockResolvedValue( artista );
-        ( Artista.destroy as any ).mockResolvedValue({});
+        ( Artista.destroy as any ).mockResolvedValue( {} );
 
         await ArtistaService.deleteArtista( id );
 
