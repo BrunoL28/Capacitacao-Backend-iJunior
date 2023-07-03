@@ -1,4 +1,3 @@
-import { QueryError } from "../../../../errors/QueryError";
 import { Musica } from "../../Musicas/models/Musica";
 import { MusicaService } from "../../Musicas/services/MusicaService";
 import { Usuario } from "../../Usuarios/models/Usuario";
@@ -11,20 +10,6 @@ import { UsuarioMusica } from "../models/UsuarioMusica";
  */
 
 export class UsuarioMusicaServiceClass {
-
-    /**
-     * Função que retorna todos os usuários relacionados a 
-     * músicas.
-     * @returns UsuarioMusica
-     */
-
-    async getUsuariosMusicas() {
-        const usuarioMusica = await UsuarioMusica.findAll();
-        if ( !usuarioMusica ) {
-            throw new QueryError( "Nenhum dado encontrado na relação!" );
-        }
-        return usuarioMusica;
-    }
 
     /**
      * Função que obtém as músicas relacionadas a um

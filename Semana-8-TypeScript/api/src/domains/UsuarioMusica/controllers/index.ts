@@ -6,17 +6,6 @@ import { UsuarioMusicaService } from "../services/UsuarioMusicaService";
 
 export const router = Router();
 
-router.get( "/usuarios-musicas", 
-    verifyJWT, 
-    async( request: Request, response: Response, next: NextFunction ) => {
-        try {
-            const usuariosMusicas = await UsuarioMusicaService.getUsuariosMusicas();
-            response.status( statusHTTP.success ).send( usuariosMusicas );
-        } catch ( error ) {
-            next( error );
-        }
-    } );
-
 router.get( "/usuarios/:id", 
     verifyJWT, 
     async( request: Request, response: Response, next: NextFunction ) => {
