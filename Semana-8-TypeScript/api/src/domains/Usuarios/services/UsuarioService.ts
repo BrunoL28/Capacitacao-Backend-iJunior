@@ -98,7 +98,7 @@ export class UsuarioServiceClass {
         if ( att_usuario.senha ) {
             att_usuario.senha = await this.encryptPassword( att_usuario.senha );
         }
-        await usuario.update( att_usuario, { where: { id: id } } );
+        await usuario.update( att_usuario );
     }
 
     /**
